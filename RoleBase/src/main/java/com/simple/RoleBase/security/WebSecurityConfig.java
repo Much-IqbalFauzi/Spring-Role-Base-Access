@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,7 +25,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  *
  * @author Much. Iqbal Fauzi
  */
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
+@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        @Autowired
 //	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -32,13 +33,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private CustomLoginSuccessHandler sucessHandler;
 
-    @Bean
-    public UserDetailsService userDetailsService(){
-        System.out.println("testing");
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withDefaultPasswordEncoder().username("user").password("password").roles("USER").build());
-        return manager;
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService(){
+//        System.out.println("testing");
+//        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+//        manager.createUser(User.withDefaultPasswordEncoder().username("user").password("password").authorities("USER", "ADMIN").build());
+//        return manager;
+//    }
     
 
 	@Override
@@ -47,26 +48,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				// URLs matching for access
 				.antMatchers("/").permitAll()
-				.antMatchers("/login").permitAll()
-//				.antMatchers("/home/**").hasAnyAuthority("ROLE_LEARNER", "ROLE_USER")
-//				.antMatchers("/admin/**").hasAnyAuthority("ROLE_LEARNER","ROLE_ADMIN")
+//				.antMatchers("/login").permitAll()
+				.antMatchers("/home").hasAuthority("ROLE_USER")
+				.antMatchers("/home").hasAuthority("ROLE_ADMIN")
+                                .antMatchers("/home").access("hasRole('ROLE_KEUANGAN')")
 				.anyRequest().authenticated()
 				.and()
 				// form login
 				.csrf().disable().formLogin()
-				.loginPage("/login")
-                                .loginProcessingUrl("/redirect")
 				.failureUrl("/login?error=true")
                                 //Handle success url
-				//.successHandler(sucessHandler)
-                                .defaultSuccessUrl("/welcome")
+				.successHandler(sucessHandler)
 				.usernameParameter("email")
 				.passwordParameter("password")
 				.and()
 				// logout
 				.logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.logoutSuccessUrl("/").and()
+				.logoutSuccessUrl("/login").and()
 				.exceptionHandling()
 				.accessDeniedPage("/access-denied");
 	}

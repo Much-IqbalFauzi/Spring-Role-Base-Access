@@ -33,14 +33,14 @@ public class ComponentProvider implements AuthenticationProvider{
         input.setEmail(email);
         input.setPassword(password);
         LoginOutput output = service.login(input);
+        
+        System.out.println(output);
         if(output.getUser()!=null){
             
         }
         
         if (output.getStatus().equals("Verified")) {
             return new UsernamePasswordAuthenticationToken(output, email, new ArrayList<>());
-//            return new UsernamePasswordAuthenticationToken(
-//              email, password, new ArrayList<>());
         } else {
             return null;
         }

@@ -41,6 +41,7 @@ public class CustomLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             authentication = SecurityContextHolder.getContext().getAuthentication();
             LoginOutput data = (LoginOutput)authentication.getPrincipal();
             String url = "/login?error=true";
+            System.out.println(data);
 
             if(data.getUser().getRoles().contains("ROLE_ADMIN")) {
                 url = "/admin";
