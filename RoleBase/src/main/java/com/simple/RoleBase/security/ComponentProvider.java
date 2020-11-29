@@ -5,8 +5,8 @@
  */
 package com.simple.RoleBase.security;
 
-import com.simple.RoleBase.entitas.LoginInput;
-import com.simple.RoleBase.entitas.LoginOutput;
+import com.simple.RoleBase.entitas.rest.LoginInput;
+import com.simple.RoleBase.entitas.rest.LoginOutput;
 import com.simple.RoleBase.service.LoginRestService;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;

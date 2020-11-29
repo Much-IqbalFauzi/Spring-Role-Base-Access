@@ -1,6 +1,6 @@
 package com.simple.RoleBase.controller;
 
-import com.simple.RoleBase.entitas.LoginInput;
+import com.simple.RoleBase.entitas.rest.LoginInput;
 import com.simple.RoleBase.service.LoginRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,12 +25,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainController {
     @Autowired LoginRestService login;
-            
-    @GetMapping("login")
-    public String index(Model model) {
-        model.addAttribute("user", new LoginInput());
-        return "login";
-    }
     
     @GetMapping("/user")
     public String user() {

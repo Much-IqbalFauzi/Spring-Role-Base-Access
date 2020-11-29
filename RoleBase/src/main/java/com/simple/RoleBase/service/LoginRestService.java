@@ -5,8 +5,8 @@
  */
 package com.simple.RoleBase.service;
 
-import com.simple.RoleBase.entitas.LoginOutput;
-import com.simple.RoleBase.entitas.LoginInput;
+import com.simple.RoleBase.entitas.rest.LoginOutput;
+import com.simple.RoleBase.entitas.rest.LoginInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -24,24 +24,26 @@ import org.springframework.web.client.RestTemplate;
  */
 @Service
 public class LoginRestService {
-    @Autowired RestTemplate res;
-    
-    @Value("@{api.uri}")
+
+    @Autowired
+    RestTemplate res;
+
+    @Value("${api.uri}")
     private String uri;
-    
+
     public LoginOutput login(LoginInput input) {
-        HttpEntity<LoginInput> request = new HttpEntity<>(input);
-        ResponseEntity<LoginOutput> responseEntity = res.exchange(
-                "http://116.254.101.228:8080/ma_test/login",
+        HttpEntity<LoginInput> request = new HttpEntity<>(input, null);
+        ResponseEntity<LoginOutput> responseEntity = res.exchange(uri + "login",
                 HttpMethod.POST,
                 request,
-                new ParameterizedTypeReference<LoginOutput>(){}
+                new ParameterizedTypeReference<LoginOutput>() {
+        }
         );
-        System.out.println("status :"+responseEntity.getStatusCodeValue());
+        System.out.println("status :" + responseEntity.getStatusCodeValue());
         return responseEntity.getBody();
     }
-    
-    public void logout(){
+
+    public void logout() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         authentication.setAuthenticated(false);
     }

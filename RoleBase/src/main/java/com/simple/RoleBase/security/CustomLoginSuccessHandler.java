@@ -5,7 +5,7 @@
  */
 package com.simple.RoleBase.security;
 
-import com.simple.RoleBase.entitas.LoginOutput;
+import com.simple.RoleBase.entitas.rest.LoginOutput;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
